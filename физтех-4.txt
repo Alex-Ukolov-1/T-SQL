@@ -1,0 +1,34 @@
+Create function f1(@x int)
+returns int
+as
+begin
+Declare @k int
+Select @k=Count(код_книги) from
+абонемент where код_читателя=@x and
+отметка_о_возврате = 0
+return @k
+end
+Select dbo.f1(1)
+go
+Create function f2()
+returns table
+as return (Select книги.код_книги, название
+from книги inner join абонемент on
+книги.код_книги=абонемент.код_книги
+where книги.код_книги in (Select код_книги from
+абонемент group by код_книги
+Having COUNT(код_читателя)= ( Select max(количество) from
+(Select код_книги, count(код_читателя) as количество
+from абонемент group by код_книги) z1)))
+Select * from dbo.f2()
+go
+Create function f3()
+returns @t table (Код_книги int, Количество int)
+as
+begin
+Insert @t Select Код_книги, count(код_книги)*2 from штрафы
+where книга_утеряна=1
+group by код_книги
+return
+end
+Select * from dbo.f3()

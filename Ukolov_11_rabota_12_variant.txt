@@ -1,0 +1,84 @@
+№1
+CREATE DATABASE Библиотека
+ON PRIMARY
+(
+NAME=file1,
+FILENAME='C:\10\file1.mdf',
+SIZE=200 MB,
+MAXSIZE=500 MB, FILEGROWTH=100 MB
+),
+(
+NAME=file2,
+FILENAME='C:\10\file2.mdf',
+SIZE=200 MB,
+MAXSIZE=500 MB, FILEGROWTH=100 MB
+)
+LOG ON
+(
+NAME=file_log,
+FILENAME='C:\10\file_log.ldf',
+SIZE=250 MB,
+MAXSIZE=500 MB, FILEGROWTH=50 MB
+)
+
+№2
+USE Библиотека
+CREATE TABLE Ученик
+(
+Код_ученика int primary key NOT NULL,
+Фамилия Char(20) NOT NULL,
+Имя Char(20) NOT NULL,
+Отчество Char(20),
+Дата_рождения Datetime,
+Домашний_адрес Char(20),
+телефон Char(20)
+);
+
+CREATE TABLE Спортивная_секция
+(
+Код_секции int primary key NOT NULL,
+Название_секции  Char(20),
+Место_проведения Char(20),
+);
+
+
+CREATE TABLE Тренер
+(
+Код_тренера int primary key NOT NULL,
+Фамилия Char(20) NOT NULL,
+Имя Char(20) NOT NULL,
+Отчество Char(20),
+специализация Char(20),
+Спортивный_разряд Char(20),
+Домашний_адрес Char(20),
+телефон Char(20),
+Дата_приёма_на_работу Datetime
+);
+
+CREATE TABLE Запись_в_секции
+(
+Код_ученика int NOT NULL,
+Код_секции int NOT NULL,
+Дата_рождения Datetime,
+PRIMARY KEY (Код_ученика,Код_секции),
+FOREIGN KEY (Код_ученика) REFERENCES Ученик (Код_ученика),
+FOREIGN KEY (Код_секции) REFERENCES Спортивная_секция (Код_секции)
+);
+
+CREATE TABLE Руководство_секциями
+(
+Код_тренера int NOT NULL,
+Код_секции int NOT NULL,
+PRIMARY KEY (Код_тренера,Код_секции),
+FOREIGN KEY (Код_тренера) REFERENCES Тренер (Код_тренера),
+FOREIGN KEY (Код_секции) REFERENCES Спортивная_секция (Код_секции)
+);
+
+CREATE TABLE Расписание
+(
+Код_тренера int NOT NULL,
+Код_секции int NOT NULL,
+Дата_и_время date NOT NULL,
+PRIMARY KEY (Код_секции,Код_тренера,Дата_и_время),
+FOREIGN KEY ( Код_тренера,Код_секции) REFERENCES Руководство_секциями(Код_тренера,Код_секции)
+);

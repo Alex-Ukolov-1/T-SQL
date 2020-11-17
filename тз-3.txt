@@ -1,0 +1,4 @@
+declare @puvodni nvarchar(20)
+set @puvodni = N'abc1d8e8ttr987avc'
+WHILE PATINDEX('%[^0-9]%', @puvodni) > 0 SET @puvodni = REPLACE(@puvodni, SUBSTRING(@puvodni, PATINDEX('%[^0-9]%', @puvodni), 1), '' ) 
+SELECT @puvodni

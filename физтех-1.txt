@@ -1,0 +1,30 @@
+Declare @a int
+Declare @b int
+Declare @c int
+Declare @d int
+Set @a=25623
+Set @d=1
+Set @b=0
+while @a<>0
+begin
+Set @c=@a-@a/10*10
+if @c/2*2=@c
+Set @c=@c+1
+Set @b=@b+@c*@d
+Set @d=@d*10
+Set @a=@a/10
+end
+Print @b
+Declare @s char(100)
+Declare @i int
+Declare @k int
+Set @s='Много-много текста'
+Set @i=1
+Set @k=0
+While @i<=Len(@s)
+begin
+if Substring(@s,@i,1) like '[аоеияэыюу]'
+Set @k=@k+1
+Set @i=@i+1
+end
+Select @k

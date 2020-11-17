@@ -1,0 +1,26 @@
+Create Procedure Pr_1 (@a char(20), @b char(20))
+as
+Begin
+Select код_книги from авторы inner join книги on авторы.код_автора=книги.код_автора
+where авторы.фамилия=@a and авторы.имя=@b and
+код_книги not in (
+Select код_книги from (
+Select книги.код_книги, month (дата_выдачи) as месяц, count(код_читателя) as количество
+from книги inner join абонемент on книги.код_книги=абонемент.код_книги
+where авторы.фамилия=@a and авторы.имя=@b
+group by книги.код_книги, month(дата_выдачи)) z1
+Where exists (
+Select * from (
+Select книги.код_книги, month (дата_выдачи) as месяц, count(код_читателя) as количество
+from авторы inner join книги on авторы.код_автора=книги.код_автора inner join
+абонемент on книги.код_книги=абонемент.код_книги
+group by книги.код_книги, month(дата_выдачи))Z2
+where z1.код_книги=z2.код_книги and z2.месяц>Z1.месяц and
+z2.количество<Z1.количество))
+end
+go
+Declare @x char(20)
+Declare @y char(20)
+Set @x='Пелевин'
+Set @y='Виктор'
+Execute dbo.Pr_1 @x,@y

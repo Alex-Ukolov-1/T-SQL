@@ -1,0 +1,79 @@
+CREATE DATABASE Библиотека
+ON PRIMARY
+
+(
+NAME=lib1,
+FILENAME='C:\1\lib1.mdf',
+SIZE=100 MB,
+MAXSIZE=500 MB, FILEGROWTH=100 MB
+),
+
+(
+NAME=lib2,
+FILENAME='D:\1\lib2.mdf',
+SIZE=100 MB,
+MAXSIZE=500 MB, FILEGROWTH=100 MB
+)
+LOG ON
+(
+NAME=lib_log,
+FILENAME='C:\1\lib_log.ldf',
+SIZE=50 MB,
+MAXSIZE=200 MB, FILEGROWTH=50 MB
+)
+USE Библиотека
+CREATE TABLE Авторы
+(
+Код_автора int primary key,
+Фамилия Char(20) NOT NULL,
+Имя Char(20) NOT NULL,
+Отчество Char(20),
+Дата_рождения Datetime,
+Национальность Char(20),
+Род_деятельности Char(20)
+);
+CREATE TABLE Книги
+(
+Код_книги int primary key,
+Название Char(20) NOT NULL,
+Год_издания int,
+Количество_страниц int,
+Издательство Char(20),
+Код_автора int NOT NULL,
+FOREIGN KEY (Код_автора) REFERENCES Авторы (Код_автора)
+);
+CREATE TABLE Читатели
+(
+Код_читателя int NOT NULL primary key,
+Фамилия Char(20) NULL,
+Имя Char(20) NULL,
+Отчество Char(20) NULL,
+Дата_рождения Datetime NULL,
+Паспортные_данные Char(40) NULL,
+Адрес Char(20) NULL,
+Контактный_телефон Char(11) NULL
+);
+CREATE TABLE Абонемент
+(
+Дата_выдачи Datetime,
+Срок_возврата int NOT NULL,
+Отметка_о_возврате bit,
+Код_книги int,
+Код_читателя int,
+PRIMARY KEY (Код_читателя,Код_книги,Дата_выдачи),
+FOREIGN KEY (Код_книги) REFERENCES Книги (Код_книги),
+FOREIGN KEY (Код_читателя) REFERENCES Читатели (Код_читателя)
+);
+CREATE TABLE Штрафы
+(
+Дата_возврата Datetime NULL,
+Состояние Char(20) NULL,
+Книга_утеряна bit NULL,
+Штраф real NULL,
+Дата_выдачи Datetime,
+Код_книги int,
+Код_читателя int,
+PRIMARY KEY (Код_читателя,Код_книги,Дата_выдачи),
+FOREIGN KEY (Код_читателя, Код_книги, Дата_выдачи) REFERENCES Абонемент
+(Код_читателя, Код_книги, Дата_выдачи)
+);

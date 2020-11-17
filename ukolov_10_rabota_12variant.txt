@@ -1,0 +1,40 @@
+CREATE TABLE TestTable(
+        [Id] [INT] IDENTITY(1,1) NOT NULL,
+        [числа] [INT] NOT NULL,
+   )
+Declare @end int
+Declare @finish int
+Declare @min int
+Declare @a int
+Declare @b int
+Declare @c int
+Declare @d int
+Declare @T int
+             Set @a=6663357
+Set @d=1
+Set @b=0
+while @a<>0
+begin
+Set @c=@a-@a/10*10
+Set @a=@a/10
+if @c/2*2=@c
+Set @c=@c
+Set @b=@c*@d
+Set @d=@d*1
+INSERT INTO TestTable(числа)
+VALUES (@b)
+SELECT * FROM TestTable
+end
+SET @min = (SELECT min(числа) FROM TestTable)
+
+Set @end=0
+              Set @a=6663357
+Set @finish=0
+while @a<>0
+begin
+Set @finish=(@finish*10)+@min
+Set @a=@a/10
+end
+               Set @a=6663357
+set @end=@a-@finish
+print @end
