@@ -1,0 +1,57 @@
+Create table Test
+(
+id_Test int Primary key,
+id_Namee Nchar(50) NOT NULL
+)
+
+Create table NameGroup
+(
+id_name_group int Primary key,
+Namee Nchar(50) NOT NULL
+)
+
+Create table Student
+(
+id_Student int Primary key,
+Namee Nchar(50) NOT NULL,
+Name_of_Test Nchar(50) NOT NULL,
+Graduates int NOT NULL,
+id_name_group int  Foreign key references NameGroup(id_name_group),
+)
+
+
+Create table Journal
+(
+id_Journal int Primary key,
+id_Name_Group int Foreign key references NameGroup(id_name_group),
+id_Test int Foreign key references Test(id_Test),
+id_Student int Foreign key references Student(id_Student),
+)
+
+
+
+ public partial class RomanEntities1 : DbContext
+    {
+        private static RomanEntities1 _context;
+        public RomanEntities1()
+            : base("name=RomanEntities1")
+        {
+        }
+
+        public static RomanEntities1 GetContext()
+        {
+            if (_context == null) _context = new RomanEntities1();
+            return _context;
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
+        public virtual DbSet<Journal> Journal { get; set; }
+        public virtual DbSet<NameGroup> NameGroup { get; set; }
+        public virtual DbSet<Student> Student { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Test> Test { get; set; }
+    }
